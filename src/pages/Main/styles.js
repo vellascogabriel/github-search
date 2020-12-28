@@ -68,6 +68,10 @@ export const List = styled.ul`
     display: grid;
     grid-template-columns: 1fr 1fr;
 
+    a{
+        text-decoration:none;
+    }
+
     li{
         margin:20px;
         color: #fff;

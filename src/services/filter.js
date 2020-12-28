@@ -1,13 +1,14 @@
 
 
-const filter = function(order, oldOrder, profiles, location, bio){
+const filter = function( order, profiles, location, bio){
         var orderList = []
 
+
+        // Ordenação por data de criação do Perfil no GitHub
         function compare(elemento1, elemento2){
 
             const since1 = elemento1.since;
             const since2 = elemento2.since;
-
             let result = 0;
 
             if(order ==="2"){
@@ -31,24 +32,25 @@ const filter = function(order, oldOrder, profiles, location, bio){
 
         orderList = profiles.sort(compare)
 
+
+        // Filtragem por localidade
         var total = [] 
         if(location){   
             orderList.map(elemento => {
                 if(elemento.location){
-                    
+
                     if((elemento.location).includes(location)){
                         
                         return total.push(elemento)
                     }
                }
-                console.log(`${typeof(elemento.location)} ${elemento.location}`)
-                
             })
         }else{
             total = orderList
         }
 
 
+        // Filtrar somente os perfis que possuem bio 
         var filtered = []
         if(bio){
             
