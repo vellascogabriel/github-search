@@ -1,27 +1,12 @@
 import styled, { keyframes, css } from 'styled-components';
 
-export const Container = styled.div`
-    max-width: 700px;
-    background: #fff;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    padding: 30px;
-    margin: 80px auto;
-
-    h1{
-        font-size: 20px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-left: 10px;
-    }
-`;
 
 export const Form = styled.form`
     
     margin-top: 30px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    width:100%;
 
     input {
         flex: 1;
@@ -29,19 +14,7 @@ export const Form = styled.form`
         padding: 10px 15px;
         border-radius: 4px;
         font-size: 16px;
-    }
-
-    select {
-        flex:1;
-        border: 1px solid #eee;
-        padding: 10px 15px;
-        border-radius: 4px;
-        font-size: 16px;
-    }
-    div{
-        display: flex;
-        flex-direction:row;
-        padding-top:10px;
+        width:100%;
     }
 
 `;
@@ -68,6 +41,7 @@ export const SubmitButton = styled.button.attrs( props => ({
     height:40px;
     margin-left: 10px;
     border-radius: 4px;
+    color: #fff;
 
     display: flex;
     justify-content: center;
@@ -85,4 +59,131 @@ export const SubmitButton = styled.button.attrs( props => ({
             animation: ${rotate} 2s linear infinite;
         }
     `}
+`;
+
+export const List = styled.ul`
+
+    list-style:none;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    li{
+        margin:20px;
+        color: #fff;
+        background-color: black;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items:center;
+        border-radius: 4px;
+
+        height: 500px;
+        width:300px;
+
+        img{
+            max-height:150px;
+            border-radius:50%;
+            box-shadow: 0 0 0.4em whitesmoke;
+        }
+
+        div{
+            display: flex;
+            flex-direction:column;
+            align-items: center;
+            justify-content:center;
+            margin-top: 20px;
+            font-size:16px;
+
+            span{
+                line-height: 1.5;
+            }
+        }
+
+        .text-name{
+            font-size: 20px;
+            margin: 5px 5px;
+            font-weight:bold;
+        }
+
+        .text-bio{
+            text-align: center;
+            line-height:1.3;
+            width:70%;
+            margin:10px;
+        }
+
+        .text-location{
+            display:flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin:5px;
+        }
+
+        a{
+            color:black;
+            text-decoration:none;
+            margin-top:10px;
+        }
+    }
+
+`;
+
+
+export const SearchHeader = styled.header`
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content:center;
+`;
+
+
+export const FilterForm = styled.form`
+
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width:100%;
+
+    select {
+        flex:1;
+        border: 1px solid #eee;
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 50%
+    }
+
+    .bio{
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        justify-content:center;
+        
+    }
+
+    .bio div, button {
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+        margin: 5px;
+        font-size:12px;
+        width:50%;
+    }
+
+    .bio h2, input{
+        margin-left:5px;
+    } 
+
+`;
+
+export const FilterTitle = styled.div`
+
+    display:flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content:center;
+    margin-top:40px;
 `;

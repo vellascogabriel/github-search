@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import {FaSearch , FaSpinner} from 'react-icons/fa';
+import {FaGithub, FaSearch , FaSpinner} from 'react-icons/fa';
+import { MdLocationOn} from 'react-icons/md';
+// import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
-// import estados from '../../services/ibge';
+import filter from '../../services/filter';
 import { estados } from './utils';
 
-
-import { Container, Form, SubmitButton } from './styles';
+import Container from '../../Components/Container';
+import { Form, SubmitButton, List, SearchHeader, FilterForm, FilterTitle } from './styles';
 
 
 class Main extends Component {
@@ -16,7 +18,9 @@ class Main extends Component {
         profiles: [],
         loading: false,
         location:'',
-        order:''
+        order:'1',
+        oldOrder:'1',
+        bio: false,
     };
 
     handleInputChange = e =>{
@@ -32,6 +36,12 @@ class Main extends Component {
         })
     }
 
+    handleBioChange = ()=> {
+        this.setState({
+            bio: true,
+        })
+    }
+
     handleOrderChange = e =>{
 
         e.preventDefault()
@@ -44,65 +54,98 @@ class Main extends Component {
     handleSubmit = async  e =>{
         e.preventDefault();
 
-        console.log(this.state)
         this.setState({ loading: true});
 
-        const { newProfile, profiles, order} = this.state;
+        const { newProfile } = this.state;
 
+        var leitura = []
         var response =''
 
-        if(newProfile){
 
-            response = await api.get(`/users/${newProfile}`)
+            const elementsPerPage = 20
+            var page = 1
+            var items = []
 
-            // console.log(response)
-            
-           
-            
+            if(newProfile){
+                response = await api.get(`/search/users?q=${newProfile}&per_page=${elementsPerPage}&page=${page}`)
+                items = response.data.items
+            }else{
+                response = await api.get(`/users`, {
+                    params: {
+                        per_page: elementsPerPage,
+                    }
+                })
 
-            const data = {
-                nome: response.data.name,
-                login: response.data.login,
-                criacao: response.data.created_at,
-                location: response.data.location,
-                bio: response.data.bio
+                items = response.data
             }
+            
+             
+            var user = {}
 
-            console.log(data);
-
-        }else{
-            response = await api.get(`/users`)
-
-            console.log(response.data)
-            console.log(this.state)
-
-            response.data.filter(elemento =>{
-                 return elemento.name === 'lukas';
+            var userLogin = items.map(element =>{
+                return {
+                    login: element.login,
+                    photo:element.avatar_url
+                }
             })
 
-        }     
-        
+
+            for(let i =0; i<userLogin.length; i++){
+                response = await api.get(`/users/${userLogin[i].login}`)
+                 user = {
+                    name: response.data.name,
+                    login: response.data.login,
+                    photo: response.data.avatar_url,
+                    since: new Date(response.data.created_at),
+                    location: response.data.location,
+                    bio: response.data.bio
+                 }
+
+                 leitura.push(user)
+            }   
 
         this.setState({
+            profiles:leitura,
             loading: false,
         })
-        // Adicionar o perfil na lista de perfis
-        // this.setState({
-        //     profiles: [...profiles, data],
-        //     newRepo: '',
-               
-        // })
+        
+
+
     }
+
+
+    handleFilter = async e =>{
+        e.preventDefault()
+
+        const { profiles, order, oldOrder, location, bio} = this.state
+
+        console.log(profiles)
+
+        const resultado = filter(order, oldOrder, profiles, location, bio)
+
+        console.log(resultado)
+
+        this.setState({
+            profiles: resultado,
+            order: order
+        })
+
+    }
+
     
     render(){
 
-        const { newProfile, loading} = this.state;
+        const { newProfile, loading, profiles} = this.state;
 
     return (
+
+    <>
     <Container>
-        <h1>
-            Perfis
-        </h1>
+        
+        <SearchHeader>
+            <FaGithub size={60}/>
+            <h1>Busca de Perfis</h1>
+        </SearchHeader>
 
         <Form onSubmit={this.handleSubmit}>
 
@@ -112,24 +155,7 @@ class Main extends Component {
             value={newProfile}
             onChange={this.handleInputChange}
             />
-
-            <div>
-            <select id="location" placeholder="Local" name="location" onChange={this.handleLocationChange}>
-                <option value="">Local</option>
-                {
-                    estados.map(elementos => {
-                        return <option value={elementos}>{elementos}</option>
-                    })
-                }   
-
-            </select>
-
-            <select id="order" name="order" onChange={this.handleOrderChange}>
-               
-                <option value="">Reordenar</option>
-                <option value="1">Usuarios mais novos</option>
-                <option value="2">Usuarios mais antigos</option>
-            </select>
+            
 
             <SubmitButton loading={loading}>
 
@@ -137,13 +163,79 @@ class Main extends Component {
                 <FaSpinner color="#FFF" size={14 }/> : <FaSearch color = "#fff" size={14} />}
                 
             </SubmitButton>
-            </div>
+            
             
         </Form>
 
-        
+        <FilterTitle>
+            <h1>Filtros</h1>
+        </FilterTitle>
 
+        <FilterForm  onSubmit={this.handleFilter}>
+
+
+            <div className="location-order">
+                <select id="location" placeholder="Local" name="location" onChange={this.handleLocationChange}>
+                    <option value="">Local</option>
+                    {
+                        estados.map(elementos => {
+                            return <option value={elementos}>{elementos}</option>
+                        })
+                    }   
+
+                </select>
+
+                <select id="order" name="order" onChange={this.handleOrderChange}>
+
+                    <option value=''>Escolha uma ordenação</option>
+                    <option value="1">Usuarios mais novos</option>
+                    <option value="2">Usuarios mais antigos</option>
+
+                </select>
+            </div>
+            <div className="bio">
+                <div>
+                    <h2> Perfis com Bio? </h2>
+                    <input type="checkbox" onChange={this.handleBioChange} />
+                </div>
+                <SubmitButton>Filtrar</SubmitButton>
+                
+            </div>
+            
+
+            
+
+        </FilterForm>
+
+
+        <List>
+            {
+                profiles.map(profile => (
+                    <li key={profile.login}>
+                        <img src={profile.photo} alt={profile.photo}/>
+                        <div>
+                            <span className="text-name">{profile.name}</span>
+                            <span>{profile.login}</span>
+
+                            <span className="text-location">
+                                { profile.location ? <MdLocationOn size={20}/> :''}
+                                { profile.location }
+                            </span>
+                            <span className="text-bio">{profile.bio}</span>
+                            <span>desde {`${profile.since.getDate()}/${profile.since.getMonth()+1}/${profile.since.getFullYear()}`}</span>
+                        </div>
+                    </li>
+                ))
+
+                
+            }
+
+    </List>             
     </Container>
+
+    
+
+    </>
     );
 }
 }
