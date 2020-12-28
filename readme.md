@@ -45,9 +45,19 @@ yarn start
 
 ![](./perfil_encontrado.png)
 
-####  A partir daí, podemos aplicar os filtros para refinarmos os resultados da pesquisa, escolhendo o location do usuário com a lista de Estado do Brasil, selecionando somente os perfis do resultado que possuem bio, e escolhendo a ordem em que os resultados aparecerão, podendo começar do perfil mais novo para o mais antigo ou vice-versa.
+####  A partir daí, podemos aplicar os filtros para refinarmos os resultados da pesquisa, escolhendo o location do usuário com a lista de Estados do Brasil, selecionando somente os perfis do resultado que possuem bio, e escolhendo a ordem em que os resultados aparecerão, podendo começar do perfil mais novo para o mais antigo ou vice-versa.
 
-#### Eu fiz o deploy desse projeto no vercel, podendo ser acessado pelo seguinte link: https://github-search-project.vercel.app/
+### Desafios 
+---------
+
+####  No desenvolvimento desse projeto houveram desafios relacionados ao limite de requisições que a API oferece para usuários não autenticados. Como a ideia inicial era usar a API de users, vi que seria muito difícil percorrer uma resposta de todos os usuários que o GitHub possui com o limite de 60 requests por hora para usuários não autenticados. Para usuários autenticados, temos o limite de 5000 resquests por hora, mas acredito que ainda sim não é o suficiente para utilizar a API de users realizando uma busca em 76000000 de perfis paginados em no máximo 100 perfis por página.
+
+#### Como solução, encontrei a API de search do GitHub, o que facilita muito trabalhar com a busca frente as limitações de requisição apresentadas. Quando digita as primeiras letras de um login de usuário, a API de busca já retorna alguns resultados relacionados com o que o usuário digitou. O que acaba facilitando o trabalho de busca e filtragem dos resultados dentro do limite de requisições. Para que seja possível realizar alguns testes de busca com o projeto, limitei o resultado das buscas em 8 perfis, uma vez que cada perfil retornado numa busca é uma requisição efetuada. 
+----------
+
+### Veja do projeto no vercel
+-----------
+#### Eu fiz o deploy desse projeto no vercel, podendo ser acessado pelo seguinte link:  https://github-search-git-master.vellascogabriel.vercel.app/
 
 #### Espero que gostem do projeto! Muito obrigado! =D
 
