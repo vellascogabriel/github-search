@@ -60,7 +60,7 @@ class Main extends Component {
         // var leitura = []
         var response =''
 
-        const elementsPerPage = 10
+        const elementsPerPage = 8
         var page = 1
         var items = []
 
