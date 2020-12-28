@@ -69,15 +69,10 @@ class Main extends Component {
             response = await api.get(`/search/users?q=${newProfile}&per_page=${elementsPerPage}&page=${page}`)
             items = response.data.items
         }else{
-            response = await api.get(`/users`, {
-                params: {
-                    per_page: elementsPerPage,
-                }
-            })
+            response = await api.get(`/users?per_page=${elementsPerPage}`)
 
-            items = response.data.items
-        }
-            
+            items = response.data
+        }    
 
         var userLogin = await Promise.all(items.map(element =>{
             return {
