@@ -2,7 +2,6 @@
 
 const filter = function(order, oldOrder, profiles, location, bio){
         var orderList = []
-        var estadoAnterior = oldOrder
 
         function compare(elemento1, elemento2){
 
@@ -33,12 +32,17 @@ const filter = function(order, oldOrder, profiles, location, bio){
         orderList = profiles.sort(compare)
 
         var total = [] 
-
         if(location){   
             orderList.map(elemento => {
-                if(elemento.location === location){
-                    return total.push(elemento)
-                }
+                if(elemento.location){
+                    
+                    if((elemento.location).includes(location)){
+                        
+                        return total.push(elemento)
+                    }
+               }
+                console.log(`${typeof(elemento.location)} ${elemento.location}`)
+                
             })
         }else{
             total = orderList

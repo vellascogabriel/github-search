@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {FaGithub, FaSearch , FaSpinner} from 'react-icons/fa';
 import { MdLocationOn} from 'react-icons/md';
-// import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 import filter from '../../services/filter';
@@ -26,7 +25,7 @@ class Main extends Component {
     handleInputChange = e =>{
         this.setState({ 
                         newProfile: e.target.value,
-                    });
+        });
     };
 
     handleLocationChange = e =>{
@@ -58,13 +57,15 @@ class Main extends Component {
 
         const { newProfile } = this.state;
 
-        var leitura = []
+        // var leitura = []
         var response =''
 
 
             const elementsPerPage = 20
             var page = 1
             var items = []
+
+
 
             if(newProfile){
                 response = await api.get(`/search/users?q=${newProfile}&per_page=${elementsPerPage}&page=${page}`)
@@ -76,38 +77,83 @@ class Main extends Component {
                     }
                 })
 
-                items = response.data
+                items = response.data.items
             }
             
              
-            var user = {}
+            console.log(`${items} items`)
 
-            var userLogin = items.map(element =>{
+            var userLogin = await Promise.all(items.map(element =>{
                 return {
                     login: element.login,
                     photo:element.avatar_url
                 }
-            })
+            }))
 
+            console.log(userLogin)
+           
 
-            for(let i =0; i<userLogin.length; i++){
-                response = await api.get(`/users/${userLogin[i].login}`)
-                 user = {
+            // for(let i =0; i<userLogin.length; i++){
+            //     response = await api.get(`/users/${userLogin[i].login}`)
+            //      user = {
+            //         name: response.data.name,
+            //         login: response.data.login,
+            //         photo: response.data.avatar_url,
+            //         since: new Date(response.data.created_at),
+            //         location: response.data.location,
+            //         bio: response.data.bio
+            //      }
+
+            //      leitura.push(user)
+            // }  
+
+            const leitura = await Promise.all(userLogin.map( async (elemento) => {
+
+                response = await api.get(`/users/${elemento.login}`,{
+                    headers:{
+                        Accept: 'application/vnd.github.v3+json'
+                    }
+                })
+                console.log(response)
+
+                return {
                     name: response.data.name,
                     login: response.data.login,
                     photo: response.data.avatar_url,
                     since: new Date(response.data.created_at),
                     location: response.data.location,
                     bio: response.data.bio
-                 }
+                }
 
-                 leitura.push(user)
-            }   
+            }))
+
+
+
+            console.log(`${typeof(leitura)} leitura depois do map`)
+
+        
+
+            // for(let i =0; i<userLogin.length; i++){
+            //     response = await api.get(`/users/${userLogin[i].login}`)
+            //      user = {
+            //         name: response.data.name,
+            //         login: response.data.login,
+            //         photo: response.data.avatar_url,
+            //         since: new Date(response.data.created_at),
+            //         location: response.data.location,
+            //         bio: response.data.bio
+            //      }
+
+            //      leitura.push(user)
+            // }   
+
 
         this.setState({
             profiles:leitura,
             loading: false,
         })
+
+        console.log(this.state.profiles)
         
 
 
@@ -219,7 +265,7 @@ class Main extends Component {
 
                             <span className="text-location">
                                 { profile.location ? <MdLocationOn size={20}/> :''}
-                                { profile.location }
+                                {profile.location}
                             </span>
                             <span className="text-bio">{profile.bio}</span>
                             <span>desde {`${profile.since.getDate()}/${profile.since.getMonth()+1}/${profile.since.getFullYear()}`}</span>
@@ -229,11 +275,9 @@ class Main extends Component {
 
                 
             }
+        </List>   
 
-    </List>             
     </Container>
-
-    
 
     </>
     );
