@@ -33,7 +33,7 @@ yarn start
 ```
 
 #### Aguarde a construção do projeto e espere o Navegador abrir com a seguinte tela
-(imagem da MAIN)
+![](./principal.png)
 
 
 #### Nessa tela podemos observar a barra de pesquisas onde colocamos o perfil que iremos pesquisar e, logo abaixo, nossos filtros para refinarmos os resultados da busca.
@@ -43,4 +43,4 @@ yarn start
 
 #### Como resultado, para que a aplicação não exceda o limite de requisições da API do GitHub sem estar autenticado, o projeto retorna no máximo 20 perfis na pesquisa, quantidade suficiente para obtermos o meu perfil nessa pesquisa.
 
-(Imagem do perfil encontrado)
+![](./perfil_encontrado.png)
