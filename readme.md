@@ -44,3 +44,11 @@ yarn start
 #### Como resultado, para que a aplicação não exceda o limite de requisições da API do GitHub sem estar autenticado, o projeto retorna no máximo 10 perfis na pesquisa, quantidade suficiente para obtermos o meu perfil nessa pesquisa.
 
 ![](./perfil_encontrado.png)
+
+####  A partir daí, podemos aplicar os filtros para refinarmos os resultados da pesquisa, escolhendo o location do usuário com a lista de Estado do Brasil, selecionando somente os perfis do resultado que possuem bio, e escolhendo a ordem em que os resultados aparecerão, podendo começar do perfil mais novo para o mais antigo ou vice-versa.
+
+#### Eu fiz o deploy desse projeto no vercel, podendo ser acessado pelo seguinte link: https://github-search-project.vercel.app/
+
+#### Espero que gostem do projeto! Muito obrigado! =D
+
+
