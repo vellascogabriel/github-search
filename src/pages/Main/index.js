@@ -53,20 +53,21 @@ class Main extends Component {
     handleSubmit = async  e =>{
         e.preventDefault();
 
-        this.setState({ loading: true});
+        this.setState({ loading: true, location:''});
 
         const { newProfile } = this.state;
 
         // var leitura = []
         var response =''
 
+        const perfil = newProfile.trim()
         const elementsPerPage = 8
         var page = 1
         var items = []
 
 
-        if(newProfile){
-            response = await api.get(`/search/users?q=${newProfile}&per_page=${elementsPerPage}&page=${page}`)
+        if(perfil){
+            response = await api.get(`/search/users?q=${perfil}&per_page=${elementsPerPage}&page=${page}`)
             items = response.data.items
         }else{
             response = await api.get(`/users?per_page=${elementsPerPage}`)
